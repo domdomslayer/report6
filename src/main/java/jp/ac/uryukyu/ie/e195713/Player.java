@@ -36,7 +36,7 @@ public class Player extends Numer0ner{
         boolean number_is_suitable = false;
         while(number_is_suitable != true){
             try{
-                System.out.println("Please your attack number.");
+                System.out.println("Please input your attack number.");
                 String receivedNumber = scan.nextLine();
                 int atkFirst = Character.getNumericValue(receivedNumber.charAt(2));
                 int atkSecond = Character.getNumericValue(receivedNumber.charAt(1));
@@ -48,6 +48,7 @@ public class Player extends Numer0ner{
                     System.out.println("It's unsuitable number.");
                 }
             }catch(NumberFormatException e){
+            }catch(StringIndexOutOfBoundsException e){
             }
         }
     }
