@@ -12,6 +12,15 @@ public class Enemy extends Numer0ner{
     ArrayList<Integer> number_list = new ArrayList<Integer>(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
     HashMap<Integer, Integer> BITE_dict = new HashMap();
     HashMap<Integer, Integer> EAT_dict = new HashMap();
+    private int attack_phase = 1;
+
+    public int getAttackPhase(){
+        return  attack_phase;
+    }
+
+    public void setAttackPhase(int attack_phase){
+        this.attack_phase = attack_phase;
+    }
 
     /**
      * Create enemy's number randomly.

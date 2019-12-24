@@ -11,7 +11,6 @@ public class Numer0ner {
     private boolean loser = false;
 
 
-
     public int getFirstDigit(){
         return first_digit;
     }
@@ -89,7 +88,7 @@ public class Numer0ner {
         if(getSecondDigit() == rcvFirst || getSecondDigit() == rcvThird){
             numBites ++;
         }
-        if(getThirdDigit() == rcvSecond || getFirstDigit() == rcvThird){
+        if(getThirdDigit() == rcvSecond || getThirdDigit() == rcvFirst){
             numBites ++;
         }
         return numBites;
