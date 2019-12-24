@@ -2,19 +2,25 @@ package jp.ac.uryukyu.ie.e195713;
 
 import java.util.Scanner;
 
+/**
+ * Player class.
+ */
 public class Player extends Numer0ner{
+    /**
+     * Set player's number by input.
+     */
     Player(){
         Scanner scan = new Scanner(System.in);
         boolean number_is_suitable = false;
         while(number_is_suitable != true){
             try{
                 System.out.println("Please input your number.");
-                setNumber(scan.next());
+                setNumber(scan.nextLine());
                 int pre_number = Integer.parseInt(getNumber());
-                int three_digit = pre_number / 100;
-                int double_digit = (pre_number / 10) % 10;
-                int single_digit = pre_number % 10;
-                if(three_digit != double_digit & three_digit != single_digit & double_digit != single_digit & pre_number<999 & pre_number>100) {
+                setThirdDigit(pre_number / 100);
+                setSecondDigit((pre_number / 10) % 10);
+                setFirstDigit(pre_number % 10);
+                if(getThirdDigit() != getSecondDigit() & getThirdDigit() != getFirstDigit() & getSecondDigit() != getFirstDigit() & pre_number<999 & pre_number>100) {
                     number_is_suitable = true;
                 }else {
                     System.out.println("It's unsuitable number.");
@@ -23,4 +29,15 @@ public class Player extends Numer0ner{
             }
         }
     }
+
+    @Override
+    void Attack(Numer0ner opponent){
+        Scanner scan = new Scanner(System.in);
+        String receivedNumber = scan.nextLine();
+        int atkFirst = Character.getNumericValue(receivedNumber.charAt(2));
+        int atkSecond = Character.getNumericValue(receivedNumber.charAt(1));
+        int atkThird = Character.getNumericValue(receivedNumber.charAt(0));
+        System.out.println(opponent.JudgeEAT(atkFirst, atkSecond, atkThird)+"EAT "+opponent.JudgeBITE(atkFirst, atkSecond, atkThird)+"BITE");
+    }
+
 }
