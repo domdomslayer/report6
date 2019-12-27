@@ -1,9 +1,6 @@
 package jp.ac.uryukyu.ie.e195713;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * Enemy class.
@@ -37,7 +34,7 @@ public class Enemy extends Numer0ner{
 
     String GenerateAttackNum(int attack_phase){
         String attack_num = null;
-        switch(attack_phase){
+        switch(getAttackPhase()){
             case 1:
                 Collections.shuffle(number_list);
                 attack_num = Integer.toString(number_list.get(0)) + Integer.toString(number_list.get(1)) + Integer.toString(number_list.get(2));
@@ -45,10 +42,53 @@ public class Enemy extends Numer0ner{
                     number_list.remove(0);
                 }
                 if(number_list.size() == 1){
-                    attack_phase = 2;
+                    setAttackPhase(2);
+                    if(phaseONE_points == 2){
+                        ArrayList<ArrayList<Integer>> restPossible= new ArrayList<ArrayList<Integer>>();
+                        for(int i=0; i<=2; i++){
+                            restPossible.add(new ArrayList<Integer>(Arrays.asList(number_list.get(0), i)));
+                        }
+                        possible_list.add(restPossible);
+                    }
                 }
+                break;
             case 2:
-
+                Random rand = new Random();
+                ArrayList<ArrayList<Integer>> attack_list = new ArrayList<ArrayList<Integer>>();
+                boolean number_is_suitable = false;
+                while(number_is_suitable != true){
+                    for(ArrayList<ArrayList<Integer>> list : possible_list){
+                        if(list.get(list.size()-1).size() != 1){
+                            attack_list.add(list.get(rand.nextInt(list.size())));
+                        } else {
+                            attack_list.add(list.get(rand.nextInt(list.size()-1)));
+                            attack_list.add(list.get(rand.nextInt(list.size()-1)));
+                        }
+                        System.out.println(attack_list);
+                    }
+                    boolean index_condition = attack_list.get(0).get(1)!=attack_list.get(1).get(1) & attack_list.get(0).get(1)!=attack_list.get(2).get(1) & attack_list.get(1).get(1)!=attack_list.get(2).get(1);
+                    boolean number_condition = attack_list.get(0).get(0)!=attack_list.get(1).get(0) & attack_list.get(0).get(0)!=attack_list.get(2).get(0) & attack_list.get(2).get(0)!=attack_list.get(1).get(0);
+                    if(number_condition & index_condition){
+                        number_is_suitable = true;
+                    } else {
+                        attack_list.clear();
+                    }
+                }
+                int attackThird = 3;
+                int attackSecond = 2;
+                int attackFirst = 1;
+                for(ArrayList<Integer> i : attack_list){
+                    switch (i.get(1)){
+                        case 0:
+                            attackThird = i.get(0); break;
+                        case 1:
+                            attackSecond = i.get(0); break;
+                        case 2:
+                            attackFirst = i.get(0); break;
+                    }
+                }
+                attack_num = String.valueOf(attackThird) + String.valueOf(attackSecond) + String.valueOf(attackFirst);
+                break;
         }
         return attack_num;
     }
@@ -69,6 +109,7 @@ public class Enemy extends Numer0ner{
         if(phaseONE_points==3){
             attack_phase = 2;
         }
+        System.out.println(possible_list); //kfodkfodkfod
     }
 
     void AddToPossibleList(String rcvNum, int EAT_num, int BITE_num) {
@@ -97,6 +138,5 @@ public class Enemy extends Numer0ner{
             }
             possible_list.add(tempBITE);
         }
-        System.out.println(possible_list);
     }
 }
