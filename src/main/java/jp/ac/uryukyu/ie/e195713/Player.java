@@ -17,10 +17,10 @@ public class Player extends Numer0ner{
                 System.out.println("Please input your number.");
                 setNumber(scan.nextLine());
                 int pre_number = Integer.parseInt(getNumber());
-                setThirdDigit(pre_number / 100);
-                setSecondDigit((pre_number / 10) % 10);
-                setFirstDigit(pre_number % 10);
-                if(getThirdDigit() != getSecondDigit() & getThirdDigit() != getFirstDigit() & getSecondDigit() != getFirstDigit() & getNumber().length() == 3) {
+                third_digit = pre_number / 100;
+                second_digit = (pre_number / 10) % 10;
+                first_digit = pre_number % 10;
+                if(third_digit != second_digit & third_digit != first_digit & second_digit != first_digit & getNumber().length() == 3) {
                     number_is_suitable = true;
                 }else {
                     System.out.println("It's unsuitable number.");

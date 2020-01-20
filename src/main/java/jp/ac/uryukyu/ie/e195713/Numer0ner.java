@@ -5,35 +5,10 @@ package jp.ac.uryukyu.ie.e195713;
  */
 public class Numer0ner {
     private String number;
-    private int first_digit;
-    private int second_digit;
-    private int third_digit;
+    protected int first_digit;
+    protected int second_digit;
+    protected int third_digit;
     private boolean loser = false;
-
-
-    public int getFirstDigit(){
-        return first_digit;
-    }
-
-    public void setFirstDigit(int first_digit){
-        this.first_digit = first_digit;
-    }
-
-    public int getSecondDigit(){
-        return second_digit;
-    }
-
-    public void setSecondDigit(int second_digit){
-        this.second_digit = second_digit;
-    }
-
-    public int getThirdDigit(){
-        return third_digit;
-    }
-
-    public void setThirdDigit(int third_digit){
-        this.third_digit = third_digit;
-    }
 
     /**
      * Get whether Numer0ner is lose.
@@ -41,10 +16,6 @@ public class Numer0ner {
      */
     public boolean isLoser(){
         return loser;
-    }
-
-    public void setLoser(boolean bool){
-        loser = bool;
     }
 
     /**
@@ -65,30 +36,30 @@ public class Numer0ner {
 
     int JudgeEAT(int rcvFirst, int rcvSecond, int rcvThird){
         int numEats = 0;
-        if(getFirstDigit() == rcvFirst){
+        if(first_digit == rcvFirst){
             numEats ++;
         }
-        if(getSecondDigit() == rcvSecond){
+        if(second_digit == rcvSecond){
             numEats ++;
         }
-        if(getThirdDigit() == rcvThird){
+        if(third_digit == rcvThird){
             numEats ++;
         }
         if(numEats == 3){
-            setLoser(true);
+             loser = true;
         }
         return numEats;
     }
 
     int JudgeBITE(int rcvFirst, int rcvSecond, int rcvThird){
         int numBites = 0;
-        if(getFirstDigit() == rcvSecond || getFirstDigit() == rcvThird){
+        if(first_digit == rcvSecond || first_digit == rcvThird){
             numBites ++;
         }
-        if(getSecondDigit() == rcvFirst || getSecondDigit() == rcvThird){
+        if(second_digit == rcvFirst || second_digit == rcvThird){
             numBites ++;
         }
-        if(getThirdDigit() == rcvSecond || getThirdDigit() == rcvFirst){
+        if(third_digit == rcvSecond || third_digit == rcvFirst){
             numBites ++;
         }
         return numBites;

@@ -6,18 +6,10 @@ import java.util.*;
  * Enemy class.
  */
 public class Enemy extends Numer0ner{
-    ArrayList<Integer> number_list = new ArrayList<Integer>(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
-    ArrayList<ArrayList<ArrayList<Integer>>> possible_list = new ArrayList<ArrayList<ArrayList<Integer>>>();
+    private ArrayList<Integer> number_list = new ArrayList<Integer>(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
+    private ArrayList<ArrayList<ArrayList<Integer>>> possible_list = new ArrayList<ArrayList<ArrayList<Integer>>>();
     private int attack_phase = 1;
     private int phaseONE_points = 0;
-
-    public int getAttackPhase(){
-        return  attack_phase;
-    }
-
-    public void setAttackPhase(int attack_phase){
-        this.attack_phase = attack_phase;
-    }
 
     /**
      * Create enemy's number randomly.
@@ -27,29 +19,19 @@ public class Enemy extends Numer0ner{
         Collections.shuffle(number_list2);
         String pre_number = Integer.toString(number_list2.get(0)) + Integer.toString(number_list2.get(1)) + Integer.toString(number_list2.get(2));
         setNumber(pre_number);
-        setFirstDigit(Character.getNumericValue(pre_number.charAt(2)));
-        setSecondDigit(Character.getNumericValue(pre_number.charAt(1)));
-        setThirdDigit(Character.getNumericValue(pre_number.charAt(0)));
+        first_digit = Character.getNumericValue(pre_number.charAt(2));
+        second_digit = Character.getNumericValue(pre_number.charAt(1));
+        third_digit = Character.getNumericValue(pre_number.charAt(0));
     }
 
     String GenerateAttackNum(int attack_phase){
         String attack_num = null;
-        switch(getAttackPhase()){
+        switch(attack_phase){
             case 1:
                 Collections.shuffle(number_list);
                 attack_num = Integer.toString(number_list.get(0)) + Integer.toString(number_list.get(1)) + Integer.toString(number_list.get(2));
                 for(int index = 0; index<=2; index++){
                     number_list.remove(0);
-                }
-                if(number_list.size() == 1){
-                    setAttackPhase(2);
-                    if(phaseONE_points == 2){
-                        ArrayList<ArrayList<Integer>> restPossible= new ArrayList<ArrayList<Integer>>();
-                        for(int i=0; i<=2; i++){
-                            restPossible.add(new ArrayList<Integer>(Arrays.asList(number_list.get(0), i)));
-                        }
-                        possible_list.add(restPossible);
-                    }
                 }
                 break;
             case 2:
@@ -65,6 +47,10 @@ public class Enemy extends Numer0ner{
                             attack_list.add(list.get(rand.nextInt(list.size()-1)));
                         }
                         System.out.println(attack_list);
+                    }
+                    if(attack_list.size() != 3){
+                        attack_list.clear();
+                        continue;
                     }
                     boolean index_condition = attack_list.get(0).get(1)!=attack_list.get(1).get(1) & attack_list.get(0).get(1)!=attack_list.get(2).get(1) & attack_list.get(1).get(1)!=attack_list.get(2).get(1);
                     boolean number_condition = attack_list.get(0).get(0)!=attack_list.get(1).get(0) & attack_list.get(0).get(0)!=attack_list.get(2).get(0) & attack_list.get(2).get(0)!=attack_list.get(1).get(0);
@@ -102,18 +88,28 @@ public class Enemy extends Numer0ner{
         int EAT_num = opponent.JudgeEAT(atkFirst, atkSecond, atkThird);
         int BITE_num = opponent.JudgeBITE(atkFirst, atkSecond, atkThird);
         System.out.println("【Enemy`s Attack】 "+attack_num+" → "+EAT_num+"EAT "+BITE_num+"BITE");
-        phaseONE_points += EAT_num + BITE_num;
-        if(attack_phase==1){
-            AddToPossibleList(attack_num, EAT_num, BITE_num);
+        switch(attack_phase){
+            case 1:
+                phaseONE_points += EAT_num + BITE_num;
+                AddToPossibleList(attack_num, EAT_num, BITE_num);
+                if(phaseONE_points == 2 & number_list.size() == 1){
+                    ArrayList<ArrayList<Integer>> restPossible= new ArrayList<ArrayList<Integer>>();
+                    for(int i=0; i<=2; i++){
+                        restPossible.add(new ArrayList<Integer>(Arrays.asList(number_list.get(0), i)));
+                    }
+                    possible_list.add(restPossible);
+                    attack_phase = 2;
+                } else if(phaseONE_points==3) {
+                    attack_phase = 2;
+                }break;
+            case 2:
+                SubFromPossibleList(atkFirst, atkSecond, atkThird, EAT_num, BITE_num); break;
         }
-        if(phaseONE_points==3){
-            attack_phase = 2;
-        }
-        System.out.println(possible_list); //kfodkfodkfod
+        System.out.println(possible_list);
     }
 
     void AddToPossibleList(String rcvNum, int EAT_num, int BITE_num) {
-        ArrayList<ArrayList<Integer>> tempEAT = new ArrayList<ArrayList<Integer>>(); //HaspMap<int number, int index>
+        ArrayList<ArrayList<Integer>> tempEAT = new ArrayList<ArrayList<Integer>>();
         ArrayList<ArrayList<Integer>> tempBITE = new ArrayList<ArrayList<Integer>>();
         for (int i = 0; i <= 2; i++) {
             tempEAT.add(new ArrayList<Integer>(Arrays.asList(Character.getNumericValue(rcvNum.charAt(i)), i)));
@@ -138,5 +134,50 @@ public class Enemy extends Numer0ner{
             }
             possible_list.add(tempBITE);
         }
+        if(BITE_num ==3){
+            caseThreeBITE(Character.getNumericValue(rcvNum.charAt(2)), Character.getNumericValue(rcvNum.charAt(1)), Character.getNumericValue(rcvNum.charAt(0)));
+        }
+    }
+
+
+    void SubFromPossibleList(int rcvFirst, int rcvSecond, int rcvThird, int EAT_num, int BITE_num){
+        ArrayList<ArrayList<Integer>> NumIndexList= new ArrayList<ArrayList<Integer>>(Arrays.asList(new ArrayList<Integer>(Arrays.asList(rcvThird ,0)), new ArrayList<Integer>(Arrays.asList(rcvSecond ,1)), new ArrayList<Integer>(Arrays.asList(rcvFirst ,2))));
+        ArrayList<Integer> OnlyNumList = new ArrayList<Integer>(Arrays.asList(rcvThird, rcvSecond, rcvFirst));
+        if(EAT_num ==0 & BITE_num == 0) {
+            System.out.println("Now working E0B0");
+            for(ArrayList<ArrayList<Integer>> CandicateList : possible_list){
+                for(int number : OnlyNumList){
+                    for(int i=0; i<=2; i++){
+                        if(CandicateList.contains(Arrays.asList(number, i))){
+                            CandicateList.remove(Arrays.asList(number, i));
+                        }
+                    }
+                }
+            }
+        }else if(EAT_num == 0){
+            for(ArrayList<ArrayList<Integer>> CandicateList : possible_list){
+                for(ArrayList<Integer> NumIndex : NumIndexList){
+                    if(CandicateList.contains(NumIndex)){
+                        CandicateList.remove(NumIndex);
+                        System.out.println("Now working E0");
+                    }
+                }
+            }
+        }
+        if(BITE_num == 3){
+            System.out.println("Now working B3");
+            caseThreeBITE(rcvFirst, rcvSecond, rcvThird);
+        }
+    }
+
+    void caseThreeBITE(int rcvFirst, int rcvSecond, int rcvThird){
+        ArrayList<ArrayList<Integer>> First_possible = new ArrayList<ArrayList<Integer>>(Arrays.asList(new ArrayList<Integer>(Arrays.asList(rcvSecond, 2)), new ArrayList<Integer>(Arrays.asList(rcvThird, 2))));
+        ArrayList<ArrayList<Integer>> Second_possible = new ArrayList<ArrayList<Integer>>(Arrays.asList(new ArrayList<Integer>(Arrays.asList(rcvFirst, 1)), new ArrayList<Integer>(Arrays.asList(rcvThird, 1))));
+        ArrayList<ArrayList<Integer>> Third_possible = new ArrayList<ArrayList<Integer>>(Arrays.asList(new ArrayList<Integer>(Arrays.asList(rcvSecond, 0)), new ArrayList<Integer>(Arrays.asList(rcvFirst, 0))));
+        possible_list = new ArrayList<ArrayList<ArrayList<Integer>>>(Arrays.asList(First_possible, Second_possible, Third_possible));
     }
 }
+
+
+//subfrom調整
+//Generateコード減らし
