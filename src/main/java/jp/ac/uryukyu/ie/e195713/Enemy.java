@@ -24,64 +24,70 @@ public class Enemy extends Numer0ner{
         third_digit = Character.getNumericValue(pre_number.charAt(0));
     }
 
-    String GenerateAttackNum(int attack_phase){
+    String GenerateAttackNum1(){
         String attack_num = null;
-        switch(attack_phase){
-            case 1:
-                Collections.shuffle(number_list);
-                attack_num = Integer.toString(number_list.get(0)) + Integer.toString(number_list.get(1)) + Integer.toString(number_list.get(2));
-                for(int index = 0; index<=2; index++){
-                    number_list.remove(0);
-                }
-                break;
-            case 2:
-                Random rand = new Random();
-                ArrayList<ArrayList<Integer>> attack_list = new ArrayList<ArrayList<Integer>>();
-                boolean number_is_suitable = false;
-                while(number_is_suitable != true){
-                    for(ArrayList<ArrayList<Integer>> list : possible_list){
-                        if(list.get(list.size()-1).size() != 1){
-                            attack_list.add(list.get(rand.nextInt(list.size())));
-                        } else {
-                            attack_list.add(list.get(rand.nextInt(list.size()-1)));
-                            attack_list.add(list.get(rand.nextInt(list.size()-1)));
-                        }
-                        System.out.println(attack_list);
-                    }
-                    if(attack_list.size() != 3){
-                        attack_list.clear();
-                        continue;
-                    }
-                    boolean index_condition = attack_list.get(0).get(1)!=attack_list.get(1).get(1) & attack_list.get(0).get(1)!=attack_list.get(2).get(1) & attack_list.get(1).get(1)!=attack_list.get(2).get(1);
-                    boolean number_condition = attack_list.get(0).get(0)!=attack_list.get(1).get(0) & attack_list.get(0).get(0)!=attack_list.get(2).get(0) & attack_list.get(2).get(0)!=attack_list.get(1).get(0);
-                    if(number_condition & index_condition){
-                        number_is_suitable = true;
-                    } else {
-                        attack_list.clear();
-                    }
-                }
-                int attackThird = 3;
-                int attackSecond = 2;
-                int attackFirst = 1;
-                for(ArrayList<Integer> i : attack_list){
-                    switch (i.get(1)){
-                        case 0:
-                            attackThird = i.get(0); break;
-                        case 1:
-                            attackSecond = i.get(0); break;
-                        case 2:
-                            attackFirst = i.get(0); break;
-                    }
-                }
-                attack_num = String.valueOf(attackThird) + String.valueOf(attackSecond) + String.valueOf(attackFirst);
-                break;
+        Collections.shuffle(number_list);
+        attack_num = Integer.toString(number_list.get(0)) + Integer.toString(number_list.get(1)) + Integer.toString(number_list.get(2));
+        for(int index = 0; index<=2; index++){
+            number_list.remove(0);
         }
+        return attack_num;
+    }
+
+    String GenerateAttackNum2(){
+        String attack_num = null;
+        Random rand = new Random();
+        ArrayList<ArrayList<Integer>> attack_list = new ArrayList<ArrayList<Integer>>();
+        boolean number_is_suitable = false;
+        while(number_is_suitable != true){
+            for(ArrayList<ArrayList<Integer>> list : possible_list){
+                if(list.get(list.size()-1).size() != 1){
+                    attack_list.add(list.get(rand.nextInt(list.size())));
+                } else {
+                    attack_list.add(list.get(rand.nextInt(list.size()-1)));
+                    attack_list.add(list.get(rand.nextInt(list.size()-1)));
+                }
+                System.out.println(attack_list);
+            }
+            if(attack_list.size() != 3){
+                attack_list.clear();
+                continue;
+            }
+            boolean index_condition = attack_list.get(0).get(1)!=attack_list.get(1).get(1) & attack_list.get(0).get(1)!=attack_list.get(2).get(1) & attack_list.get(1).get(1)!=attack_list.get(2).get(1);
+            boolean number_condition = attack_list.get(0).get(0)!=attack_list.get(1).get(0) & attack_list.get(0).get(0)!=attack_list.get(2).get(0) & attack_list.get(2).get(0)!=attack_list.get(1).get(0);
+            if(number_condition & index_condition){
+                number_is_suitable = true;
+            } else {
+                attack_list.clear();
+            }
+        }
+        int attackThird = 3;
+        int attackSecond = 2;
+        int attackFirst = 1;
+        for(ArrayList<Integer> i : attack_list){
+            switch (i.get(1)){
+                case 0:
+                    attackThird = i.get(0); break;
+                case 1:
+                    attackSecond = i.get(0); break;
+                case 2:
+                    attackFirst = i.get(0); break;
+            }
+        }
+        attack_num = String.valueOf(attackThird) + String.valueOf(attackSecond) + String.valueOf(attackFirst);
         return attack_num;
     }
 
     @Override
     void Attack(Numer0ner opponent){
-        String attack_num = GenerateAttackNum(attack_phase);
+        String attack_num = null;
+        switch(attack_phase){
+            case 1:
+                attack_num = GenerateAttackNum1(); break;
+            case 2:
+                attack_num = GenerateAttackNum2(); break;
+        }
+
         int atkFirst = Character.getNumericValue(attack_num.charAt(2));
         int atkSecond = Character.getNumericValue(attack_num.charAt(1));
         int atkThird = Character.getNumericValue(attack_num.charAt(0));
@@ -178,6 +184,7 @@ public class Enemy extends Numer0ner{
     }
 }
 
-
-//subfrom調整
-//Generateコード減らし
+//Test
+//jar
+//TestGradle
+//javaDoc
