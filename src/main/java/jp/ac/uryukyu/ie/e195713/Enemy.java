@@ -6,9 +6,27 @@ import java.util.*;
  * Enemy class.
  */
 public class Enemy extends Numer0ner{
+
+    /**
+     * list included numbers which are from 0 to 9
+     */
     private ArrayList<Integer> number_list = new ArrayList<Integer>(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
+
+    /**
+     * list included lists which gathers possible number and its place
+     */
     private ArrayList<ArrayList<ArrayList<Integer>>> possible_list = new ArrayList<ArrayList<ArrayList<Integer>>>();
+
+    /**
+     * the phase of Enemy's thought
+     * phase 1: narrow possible numbers from all numbers roughly
+     * phase 2: guess player's number based on narrowed possible list
+     */
     private int attack_phase = 1;
+
+    /**
+     * the number of EAT or BITE so far
+     */
     private int phaseONE_points = 0;
 
     /**
@@ -18,12 +36,16 @@ public class Enemy extends Numer0ner{
         ArrayList<Integer> number_list2 = (ArrayList<Integer>) number_list.clone();
         Collections.shuffle(number_list2);
         String pre_number = Integer.toString(number_list2.get(0)) + Integer.toString(number_list2.get(1)) + Integer.toString(number_list2.get(2));
-        setNumber(pre_number);
+        number = pre_number;
         first_digit = Character.getNumericValue(pre_number.charAt(2));
         second_digit = Character.getNumericValue(pre_number.charAt(1));
         third_digit = Character.getNumericValue(pre_number.charAt(0));
     }
 
+    /**
+     * Generate attack number during phase 1
+     * @return number to attack to player
+     */
     String GenerateAttackNum1(){
         String attack_num = null;
         Collections.shuffle(number_list);
@@ -34,6 +56,10 @@ public class Enemy extends Numer0ner{
         return attack_num;
     }
 
+    /**
+     * Generate attack number during phase 2
+     * @return number to attack to player
+     */
     String GenerateAttackNum2(){
         String attack_num = null;
         Random rand = new Random();
@@ -47,7 +73,6 @@ public class Enemy extends Numer0ner{
                     attack_list.add(list.get(rand.nextInt(list.size()-1)));
                     attack_list.add(list.get(rand.nextInt(list.size()-1)));
                 }
-                System.out.println(attack_list);
             }
             if(attack_list.size() != 3){
                 attack_list.clear();
@@ -93,7 +118,7 @@ public class Enemy extends Numer0ner{
         int atkThird = Character.getNumericValue(attack_num.charAt(0));
         int EAT_num = opponent.JudgeEAT(atkFirst, atkSecond, atkThird);
         int BITE_num = opponent.JudgeBITE(atkFirst, atkSecond, atkThird);
-        System.out.println("【Enemy`s Attack】 "+attack_num+" → "+EAT_num+"EAT "+BITE_num+"BITE");
+        System.out.println("【Enemy's Attack】 "+attack_num+" → "+EAT_num+"EAT "+BITE_num+"BITE");
         switch(attack_phase){
             case 1:
                 phaseONE_points += EAT_num + BITE_num;
@@ -111,9 +136,14 @@ public class Enemy extends Numer0ner{
             case 2:
                 SubFromPossibleList(atkFirst, atkSecond, atkThird, EAT_num, BITE_num); break;
         }
-        System.out.println(possible_list);
     }
 
+    /**
+     * make possible list
+     * @param rcvNum attack number which Enemy did
+     * @param EAT_num the number of EAT
+     * @param BITE_num the number of BITE
+     */
     void AddToPossibleList(String rcvNum, int EAT_num, int BITE_num) {
         ArrayList<ArrayList<Integer>> tempEAT = new ArrayList<ArrayList<Integer>>();
         ArrayList<ArrayList<Integer>> tempBITE = new ArrayList<ArrayList<Integer>>();
@@ -145,12 +175,18 @@ public class Enemy extends Numer0ner{
         }
     }
 
-
+    /**
+     * attempt to guess player's number based on possible list
+     * @param rcvFirst first digit of attack number which Enemy did
+     * @param rcvSecond second digit of attack number which Enemy did
+     * @param rcvThird third digit of attack number which Enemy did
+     * @param EAT_num the number of EAT
+     * @param BITE_num the number of BITE
+     */
     void SubFromPossibleList(int rcvFirst, int rcvSecond, int rcvThird, int EAT_num, int BITE_num){
         ArrayList<ArrayList<Integer>> NumIndexList= new ArrayList<ArrayList<Integer>>(Arrays.asList(new ArrayList<Integer>(Arrays.asList(rcvThird ,0)), new ArrayList<Integer>(Arrays.asList(rcvSecond ,1)), new ArrayList<Integer>(Arrays.asList(rcvFirst ,2))));
         ArrayList<Integer> OnlyNumList = new ArrayList<Integer>(Arrays.asList(rcvThird, rcvSecond, rcvFirst));
         if(EAT_num ==0 & BITE_num == 0) {
-            System.out.println("Now working E0B0");
             for(ArrayList<ArrayList<Integer>> CandicateList : possible_list){
                 for(int number : OnlyNumList){
                     for(int i=0; i<=2; i++){
@@ -165,17 +201,21 @@ public class Enemy extends Numer0ner{
                 for(ArrayList<Integer> NumIndex : NumIndexList){
                     if(CandicateList.contains(NumIndex)){
                         CandicateList.remove(NumIndex);
-                        System.out.println("Now working E0");
                     }
                 }
             }
         }
         if(BITE_num == 3){
-            System.out.println("Now working B3");
             caseThreeBITE(rcvFirst, rcvSecond, rcvThird);
         }
     }
 
+    /**
+     * update possible list considerably when Enemy got 3 BITE
+     * @param rcvFirst first digit of attack number which Enemy did
+     * @param rcvSecond second digit of attack number which Enemy did
+     * @param rcvThird third digit of attack number which Enemy did
+     */
     void caseThreeBITE(int rcvFirst, int rcvSecond, int rcvThird){
         ArrayList<ArrayList<Integer>> First_possible = new ArrayList<ArrayList<Integer>>(Arrays.asList(new ArrayList<Integer>(Arrays.asList(rcvSecond, 2)), new ArrayList<Integer>(Arrays.asList(rcvThird, 2))));
         ArrayList<ArrayList<Integer>> Second_possible = new ArrayList<ArrayList<Integer>>(Arrays.asList(new ArrayList<Integer>(Arrays.asList(rcvFirst, 1)), new ArrayList<Integer>(Arrays.asList(rcvThird, 1))));
@@ -187,4 +227,3 @@ public class Enemy extends Numer0ner{
 //Test
 //jar
 //TestGradle
-//javaDoc

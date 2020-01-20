@@ -4,10 +4,29 @@ package jp.ac.uryukyu.ie.e195713;
  * Numer0ner class. Superclass of Enemy and Player.
  */
 public class Numer0ner {
-    private String number;
+    /**
+     * Numer0ner's number.
+     */
+    protected String number;
+
+    /**
+     * Number's first digit.
+     */
     protected int first_digit;
+
+    /**
+     * Number's second digit.
+     */
     protected int second_digit;
+
+    /**
+     * Number's third digit.
+     */
     protected int third_digit;
+
+    /**
+     * Whether Numer0ner is loser.
+     */
     private boolean loser = false;
 
     /**
@@ -19,21 +38,19 @@ public class Numer0ner {
     }
 
     /**
-     * Set Numer0ner's number.
-     * @param args Number which wanted to set
+     * set Numer0ner's number, for only UnitTest
+     * @param number Numer0ner's number
      */
-    public void setNumber(String args){
-        this.number = args;
+    public void setNumber(String number){
+        this.number = number;
     }
-
     /**
-     * Get Numer0ner's number.
-     * @return Numer0ner`s number
+     * compare number and received number, and return the number of EAT.
+     * @param rcvFirst first digit of received number.
+     * @param rcvSecond second digit of received number.
+     * @param rcvThird third digit of received number.
+     * @return the number of EAT
      */
-    public String getNumber(){
-        return number;
-    }
-
     int JudgeEAT(int rcvFirst, int rcvSecond, int rcvThird){
         int numEats = 0;
         if(first_digit == rcvFirst){
@@ -51,6 +68,13 @@ public class Numer0ner {
         return numEats;
     }
 
+    /**
+     * compare number and received number, and return the number of BITE.
+     * @param rcvFirst first digit of received number.
+     * @param rcvSecond second digit of received number.
+     * @param rcvThird third digit of received number.
+     * @return the number of BITE
+     */
     int JudgeBITE(int rcvFirst, int rcvSecond, int rcvThird){
         int numBites = 0;
         if(first_digit == rcvSecond || first_digit == rcvThird){
@@ -65,5 +89,9 @@ public class Numer0ner {
         return numBites;
     }
 
+    /**
+     * attack to an opponent.
+     * @param opponent Numer0ner who is attacked.
+     */
     void Attack(Numer0ner opponent){}
 }

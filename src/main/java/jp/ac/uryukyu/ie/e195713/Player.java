@@ -15,12 +15,12 @@ public class Player extends Numer0ner{
         while(number_is_suitable != true){
             try{
                 System.out.println("Please input your number.");
-                setNumber(scan.nextLine());
-                int pre_number = Integer.parseInt(getNumber());
+                number = scan.nextLine();
+                int pre_number = Integer.parseInt(number);
                 third_digit = pre_number / 100;
                 second_digit = (pre_number / 10) % 10;
                 first_digit = pre_number % 10;
-                if(third_digit != second_digit & third_digit != first_digit & second_digit != first_digit & getNumber().length() == 3) {
+                if(third_digit != second_digit & third_digit != first_digit & second_digit != first_digit & number.length() == 3) {
                     number_is_suitable = true;
                 }else {
                     System.out.println("It's unsuitable number.");
@@ -43,7 +43,7 @@ public class Player extends Numer0ner{
                 int atkThird = Character.getNumericValue(receivedNumber.charAt(0));
                 if(atkFirst != atkSecond & atkFirst != atkThird & atkSecond != atkThird & receivedNumber.length()==3) {
                     number_is_suitable = true;
-                    System.out.println("【Player`s Attack】"+receivedNumber+" → "+opponent.JudgeEAT(atkFirst, atkSecond, atkThird)+"EAT "+opponent.JudgeBITE(atkFirst, atkSecond, atkThird)+"BITE");
+                    System.out.println("【Player's Attack】"+receivedNumber+" → "+opponent.JudgeEAT(atkFirst, atkSecond, atkThird)+"EAT "+opponent.JudgeBITE(atkFirst, atkSecond, atkThird)+"BITE");
                 }else {
                     System.out.println("It's unsuitable number.");
                 }
