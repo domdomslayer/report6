@@ -1,5 +1,6 @@
 package jp.ac.uryukyu.ie.e195713;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -16,6 +17,9 @@ public class Enemy extends Numer0ner{
      * list included lists which gathers possible number and its place
      */
     private ArrayList<ArrayList<ArrayList<Integer>>> possible_list = new ArrayList<ArrayList<ArrayList<Integer>>>();
+
+
+    private ArrayList<String> AlreadyAttackList= new ArrayList<String>();
 
     /**
      * the phase of Enemy's thought
@@ -62,6 +66,9 @@ public class Enemy extends Numer0ner{
      */
     String GenerateAttackNum2(){
         String attack_num = null;
+        int attackThird = 3;
+        int attackSecond = 2;
+        int attackFirst = 1;
         Random rand = new Random();
         ArrayList<ArrayList<Integer>> attack_list = new ArrayList<ArrayList<Integer>>();
         boolean number_is_suitable = false;
@@ -82,24 +89,25 @@ public class Enemy extends Numer0ner{
             boolean number_condition = attack_list.get(0).get(0)!=attack_list.get(1).get(0) & attack_list.get(0).get(0)!=attack_list.get(2).get(0) & attack_list.get(2).get(0)!=attack_list.get(1).get(0);
             if(number_condition & index_condition){
                 number_is_suitable = true;
+                for(ArrayList<Integer> i : attack_list){
+                    switch (i.get(1)){
+                        case 0:
+                            attackThird = i.get(0); break;
+                        case 1:
+                            attackSecond = i.get(0); break;
+                        case 2:
+                            attackFirst = i.get(0); break;
+                    }
+                }
+                attack_num = String.valueOf(attackThird) + String.valueOf(attackSecond) + String.valueOf(attackFirst);
+                if(AlreadyAttackList.contains(attack_num)){
+                    attack_list.clear();
+                    number_is_suitable = false;
+                }
             } else {
                 attack_list.clear();
             }
         }
-        int attackThird = 3;
-        int attackSecond = 2;
-        int attackFirst = 1;
-        for(ArrayList<Integer> i : attack_list){
-            switch (i.get(1)){
-                case 0:
-                    attackThird = i.get(0); break;
-                case 1:
-                    attackSecond = i.get(0); break;
-                case 2:
-                    attackFirst = i.get(0); break;
-            }
-        }
-        attack_num = String.valueOf(attackThird) + String.valueOf(attackSecond) + String.valueOf(attackFirst);
         return attack_num;
     }
 
@@ -134,7 +142,9 @@ public class Enemy extends Numer0ner{
                     attack_phase = 2;
                 }break;
             case 2:
-                SubFromPossibleList(atkFirst, atkSecond, atkThird, EAT_num, BITE_num); break;
+                SubFromPossibleList(atkFirst, atkSecond, atkThird, EAT_num, BITE_num);
+                AlreadyAttackList.add(attack_num);
+                System.out.println(AlreadyAttackList); break;
         }
     }
 
@@ -223,7 +233,3 @@ public class Enemy extends Numer0ner{
         possible_list = new ArrayList<ArrayList<ArrayList<Integer>>>(Arrays.asList(First_possible, Second_possible, Third_possible));
     }
 }
-
-//Test
-//jar
-//TestGradle
