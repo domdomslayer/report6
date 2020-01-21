@@ -12,7 +12,11 @@ public class Main {
             NumberOfTurn++;
         }
         if(enemy.isLoser()){
-            System.out.println("You win!");
+            if(player.isLoser()){
+                System.out.println("This game is drawn.");
+            } else{
+                System.out.println("You win!");
+            }
         }else{
             System.out.println("You lose...");
         }

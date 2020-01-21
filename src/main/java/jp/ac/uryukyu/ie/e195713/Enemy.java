@@ -18,7 +18,9 @@ public class Enemy extends Numer0ner{
      */
     private ArrayList<ArrayList<ArrayList<Integer>>> possible_list = new ArrayList<ArrayList<ArrayList<Integer>>>();
 
-
+    /**
+     * list included numbers used for attack already
+     */
     private ArrayList<String> AlreadyAttackList= new ArrayList<String>();
 
     /**
@@ -143,8 +145,7 @@ public class Enemy extends Numer0ner{
                 }break;
             case 2:
                 SubFromPossibleList(atkFirst, atkSecond, atkThird, EAT_num, BITE_num);
-                AlreadyAttackList.add(attack_num);
-                System.out.println(AlreadyAttackList); break;
+                AlreadyAttackList.add(attack_num); break;
         }
     }
 
