@@ -43,7 +43,11 @@ public class Numer0ner {
      */
     public void setNumber(String number){
         this.number = number;
+        this.first_digit = Character.getNumericValue(number.charAt(2));
+        this.second_digit = Character.getNumericValue(number.charAt(1));
+        this.third_digit = Character.getNumericValue(number.charAt(0));
     }
+
     /**
      * compare number and received number, and return the number of EAT.
      * @param rcvFirst first digit of received number.
